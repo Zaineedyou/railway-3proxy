@@ -1,6 +1,7 @@
-FROM 3proxy/3proxy:latest
+FROM alpine:3.20
 
-# Copy custom entrypoint that generates config from env vars
+RUN apk add --no-cache 3proxy
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

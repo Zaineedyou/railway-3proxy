@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-# Default values
 HTTP_PORT=${HTTP_PORT:-3128}
 SOCKS_PORT=${SOCKS_PORT:-1080}
 PROXY_USER=${PROXY_USER:-}
@@ -26,22 +25,16 @@ if [ -n "$PROXY_USER" ] && [ -n "$PROXY_PASS" ]; then
   echo "auth strong" >> "$CONFIG"
   echo "allow $PROXY_USER" >> "$CONFIG"
 else
-  echo "# WARNING: Running without authentication (not recommended)" >> "$CONFIG"
+  echo "# WARNING: Running without authentication" >> "$CONFIG"
   echo "auth none" >> "$CONFIG"
   echo "allow *" >> "$CONFIG"
 fi
 
 cat >> "$CONFIG" <<EOF
 
-# HTTP Proxy
 proxy -p$HTTP_PORT
-
-# SOCKS5 Proxy
 socks -p$SOCKS_PORT
 EOF
 
-echo "Starting 3proxy with config:"
-cat "$CONFIG"
-echo "----------------------------"
-
+echo "Starting 3proxy..."
 exec 3proxy "$CONFIG"
